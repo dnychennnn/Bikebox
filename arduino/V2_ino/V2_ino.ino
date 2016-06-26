@@ -1,4 +1,5 @@
-#include <LedControlMS.h>
+#include <LedControl.h>
+#include <SoftwareSerial.h>   // 引用程式庫
 
 /*
 This is for the moto navigation.
@@ -104,7 +105,6 @@ const unsigned char exclamation[1][32] =
 
 
 
-
 void setup(){
   Serial.begin(9600); // 開啟 Serial port, 通訊速率為 9600 bps
   //for (int pin1 = 2 ; pin1 <=13;pin1++){ // 定義digital 2~13 為輸出
@@ -132,13 +132,13 @@ pinMode(LEDARRAY_LAT, OUTPUT);
 //  delay(50);
  // }
   //Serial.println("OK"); // 回傳"OK"
- 
+
 }
 
 void serialEvent() {
   while (Serial.available()){
     chr = Serial.read();
-    Serial.println(chr);
+    //Serial.println(chr);
     char inputcheck = Serial.read();
     Serial.println(inputcheck);
     if (inputcheck == '7'){
@@ -175,16 +175,30 @@ void serialEvent() {
   //    Serial.println(inputcheck); // 回傳"inputcheck"
   }
 
+  
+
 }
 
 void loop(){
+    
  Display(Word9);
  if(chr != 'Z'){
  
-   if(chr == 'J') //　左轉
-     Display(Word3);	
+   if(chr == '1') //　左轉
+   { 
+  digitalWrite(2, LOW); //給pin腳低電壓 (LED不通電就暗)
+  delay(1000); //延遲1秒鐘(1000毫秒)
+  digitalWrite(2, HIGH); //給pin腳高電壓 (LED通電就亮)
+    //Display(Word3);	
+   }
    else if(chr == 'K')  //　右轉
+    {
+//      digitalWrite(4, HIGH); //給pin腳高電壓 (LED通電就亮)
+//    delay(1000); //延遲1秒鐘(1000毫秒)
+//    digitalWrite(4, LOW); //給pin腳低電壓 (LED不通電就暗)
+//    delay(1000); //延遲1秒鐘(1000毫秒)
      Display(Word2);	
+    }
    else if(chr == 'L')  // 　微左
      Display(Word5);	
    else if(chr == 'M')  // 　微右
@@ -247,7 +261,7 @@ if (chr == 'G'|| chr == 'H' || chr == 'I')
     //   for(int i  = 0 ;i < 2500;i++){
       //  for (int ct=0;ct<=(4-countingTime);ct++)
         //    digitalWrite(ct+10, HIGH);
-         lc.displayChar(0, lc.getCharArrayPosition(ch));
+         //lc.displayChar(0, lc.getCharArrayPosition(ch));
          
       // }
      //if(countingTime == 0)
